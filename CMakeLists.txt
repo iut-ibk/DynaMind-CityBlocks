@@ -5,10 +5,23 @@ FIND_PATH(DYNAMINDDEV DynaMindDevCmake.txt
             PATHS   $ENV{DYNAMIND_DIR}/include
             PATH_SUFFIXES dynamindcore/CMake)
 
-IF(DYNAMINDDEV)
-    INCLUDE(${DYNAMINDDEV}/DynaMindDevCmake.txt)
+IF(DYNAMIND_INCLUDE_DIR)
+        MESSAGE("Compiled from toolbox")
+        MESSAGE("DYNAMIND_INCLUDE_DIR ${DYNAMIND_INCLUDE_DIR}")
+        SET (DYNAMIND_CORE_LIBRARY dynamindcore)
+        MESSAGE("${DYNAMIND_CORE_LIBRARY}")
 ELSE()
-    MESSAGE(FATAL_ERROR "Could not find dynamind. Maybe not installed ?")
+        MESSAGE("Compiled from stand alone")
+        FIND_PATH(DYNAMINDDEV DynaMindDevCmake.txt
+        PATHS $ENV{DYNAMIND_DIR}/include
+        PATH_SUFFIXES dynamindcore/CMake)
+
+        IF(DYNAMINDDEV)
+                INCLUDE(${DYNAMINDDEV}/DynaMindDevCmake.txt)
+        ELSE()
+                MESSAGE(FATAL_ERROR "Could not find dynamind. Maybe not installed ?")
+        ENDIF()
+
 ENDIF()
 
 FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
@@ -24,7 +37,11 @@ ELSE()
         MESSAGE(STATUS "Build Type = Release")
 ENDIF()
 
-SET(LIBRARY_OUTPUT_PATH ${dynamind-basicmodules_BINARY_DIR})
-SET(EXECUTABLE_OUTPUT_PATH ${dynamind-basicmodules_BINARY_DIR})
-
+IF(DYNAMIND_TOOLBOX_BUILD_DIR)
+    SET(LIBRARY_OUTPUT_PATH ${DYNAMIND_TOOLBOX_BUILD_DIR}/Modules)
+    SET(EXECUTABLE_OUTPUT_PATH ${DYNAMIND_TOOLBOX_BUILD_DIR}/Modules)
+ELSE()
+    SET(LIBRARY_OUTPUT_PATH ${cityblocks_BINARY_DIR})
+    SET(EXECUTABLE_OUTPUT_PATH ${cityblocks_BINARY_DIR})
+ENDIF()
 ADD_SUBDIRECTORY(src/CityBlocks)
