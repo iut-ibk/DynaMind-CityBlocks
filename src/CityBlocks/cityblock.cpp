@@ -126,7 +126,7 @@ void CityBlock::run() {
         double realheight = blockHeight / elements_y;
         fblock->addAttribute("CityBlock_Width",realwidth);
         fblock->addAttribute("CityBlock_Height",realheight);
-         StartAndEndNodeList.clear();
+        StartAndEndNodeList.clear();
 
 
         for (int x = 0; x < elements_x; x++) {
@@ -219,10 +219,11 @@ void CityBlock::addEdge(DM::Edge *e, DM::Node * n1, DM::Node * n2) {
     }
     std::map<DM::Node*, DM::Edge* > submap = StartAndEndNodeList[n1];
     submap[n2] = e;
-
+    StartAndEndNodeList[n1] = submap;
     if (StartAndEndNodeList.find(n2) == StartAndEndNodeList.end()) {
         StartAndEndNodeList[n2] = std::map<DM::Node*, DM::Edge* >();
     }
     submap = StartAndEndNodeList[n2];
     submap[n1] = e;
+    StartAndEndNodeList[n2] = submap;
 }
