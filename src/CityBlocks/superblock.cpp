@@ -40,8 +40,8 @@ SuperBlock::SuperBlock()
     views.push_back(block);
     height = 4000;
     width = 8000;
-offsetx = 0;
-offsety = 0;
+    offsetx = 0;
+    offsety = 0;
     this->addParameter("Height", DM::LONG, &height);
     this->addParameter("Width", DM::LONG, &width);
     this->addParameter("offsetx", DM::LONG, &offsetx);
