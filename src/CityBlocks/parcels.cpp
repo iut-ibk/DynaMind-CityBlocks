@@ -33,7 +33,7 @@ Parcels::Parcels()
 {
     cityblock = DM::View("CITYBLOCK", DM::FACE, DM::READ);
 
-    parcels = DM::View("PARCEL", DM::FACE, DM::READ);
+    parcels = DM::View("PARCEL", DM::FACE, DM::WRITE);
 
     streets = DM::View("STREET", DM::EDGE, DM::MODIFY);
     streets.addAttribute("Order");
@@ -89,8 +89,6 @@ void Parcels::run() {
         double length = delta.getX();
         double height = delta.getY();
 
-
-
         //Add Street
         DM::Node * streetnode1 = city->addNode(origin.getX(), origin.getY()+height/2, 0, intersections);
         DM::Node * streetnode2 = city->addNode(origin.getX()+length, origin.getY()+height/2, 0, intersections);
@@ -106,12 +104,6 @@ void Parcels::run() {
 
         DM::Edge * street = city->addEdge(streetnode1, streetnode2, streets);
         street->addAttribute("Order",1);
-
-
-
-
-
-
 
         //Create Parcels
 
@@ -131,26 +123,6 @@ void Parcels::run() {
 
             for (int y = 0; y < elements_y; y++) {
 
-                /*DM::Node * n1 = TBVectorData::addNodeToSystem2D(city,
-                                                                intersections,
-                                                                origin+DM::Node(realwidth*x,realheight*y,0),
-                                                                true,
-                                                                .001);
-                DM::Node * n2 = TBVectorData::addNodeToSystem2D(city,
-                                                                intersections,
-                                                                origin+DM::Node(realwidth*(x+1), realheight*y,0),
-                                                                true,
-                                                                .001);
-                DM::Node * n3 = TBVectorData::addNodeToSystem2D(city,
-                                                                intersections,
-                                                                origin+DM::Node( realwidth*(x+1), realheight*(y+1),0),
-                                                                true,
-                                                                .001);
-                DM::Node * n4 = TBVectorData::addNodeToSystem2D(city,
-                                                                intersections,
-                                                                origin+DM::Node (realwidth*x,realheight*(y+1),0),
-                                                                true,
-                                                                .001);*/
                 DM::Node * n1 = city->addNode( origin+DM::Node(realwidth*x,realheight*y,0));
                 DM::Node * n2 = city->addNode( origin+DM::Node(realwidth*(x+1), realheight*y,0));
                 DM::Node * n3 = city->addNode( origin+DM::Node( realwidth*(x+1), realheight*(y+1),0));
@@ -198,6 +170,7 @@ void Parcels::run() {
                 ve.push_back(n2);
                 ve.push_back(n3);
                 ve.push_back(n4);
+                ve.push_back(n1);
 
 
                 DM::Face * f = city->addFace(ve, parcels);
