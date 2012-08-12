@@ -38,8 +38,8 @@ SuperBlock::SuperBlock()
     block.addAttribute("Height");
     block.addAttribute("Width");
     views.push_back(block);
-    height = 4000;
-    width = 8000;
+    height = 1000;
+    width = 1000;
     offsetx = 0;
     offsety = 0;
     this->addParameter("Height", DM::LONG, &height);
@@ -71,6 +71,8 @@ void SuperBlock::run() {
     ve.push_back(n2);
     ve.push_back(n3);
     ve.push_back(n4);
+    ve.push_back(n1);
+
 
 
     DM::Face * f = blocks->addFace(ve, block);
