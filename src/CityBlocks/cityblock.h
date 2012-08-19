@@ -29,6 +29,7 @@
 
 #include <dmmodule.h>
 #include <dm.h>
+#include <QHash>
 class CityBlock : public DM::Module
 {
     DM_DECLARE_NODE(CityBlock)
@@ -45,9 +46,14 @@ private:
     DM::View cityblock;
     DM::View streets;
     DM::View centercityblock;
+    QHash<QString, std::vector<DM::Node* > *> nodeList;
     std::map<DM::Node*, std::map<DM::Node*, DM::Edge* > > StartAndEndNodeList;
+    void initPointList(DM::System * sys);
+    QString createHash(double x, double y);
+    double devider;
     DM::Edge * getAlreadyCreateEdge(DM::Node * n1, DM::Node* n2);
     void addEdge(DM::Edge * e, DM::Node *n1, DM::Node *n2);
+    DM::Node * addNode(DM::System * sys, DM::View, double x, double y, double z, double tol);
 };
 
 #endif // CREATEPARCELS_H
