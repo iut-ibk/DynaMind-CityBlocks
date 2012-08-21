@@ -39,6 +39,9 @@ CityBlock::CityBlock()
     superblock.addAttribute("CityBlock_Height");
     cityblock = DM::View("CITYBLOCK", DM::FACE, DM::WRITE);
     cityblock.addAttribute("Area");
+    cityblock.addAttribute("grid_id");
+    cityblock.addAttribute("relative_x");
+    cityblock.addAttribute("relative_y");
 
     streets = DM::View("STREET", DM::EDGE, DM::WRITE);
     intersections = DM::View("INTERSECTION", DM::NODE, DM::WRITE);
@@ -130,9 +133,10 @@ void CityBlock::run() {
         StartAndEndNodeList.clear();
 
 
+        int counter = 0;
         for (int x = 0; x < elements_x; x++) {
             for (int y = 0; y < elements_y; y++) {
-
+                counter++;
                 DM::Node * n1 = addNode(city,
                                         intersections,
                                         minX + realwidth*x,minY + realheight*y,0,
@@ -189,6 +193,9 @@ void CityBlock::run() {
 
                 DM::Face * f = city->addFace(ve, cityblock);
                 f->addAttribute("Area", realwidth*realheight);
+                f->addAttribute("grid_id", counter);
+                f->addAttribute("relative_x", x+1);
+                f->addAttribute("relative_y", y+1);
                 DM::Node * n =city->addNode(minX + realwidth*(x+0.5),minY + realheight*(y+0.5),0, centercityblock);
                 DM::Attribute attr("ID_CATCHMENT");
                 attr.setString(f->getUUID());
