@@ -39,7 +39,7 @@ class CityBlock : public DM::Module
 private:
     double height;
     double width;
-
+    bool createStreets;
     DM::View superblock;
     DM::View intersections;
     DM::View cityblock;

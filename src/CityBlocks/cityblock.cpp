@@ -55,13 +55,15 @@ CityBlock::CityBlock()
 
     this->width = 100;
     this->height = 100;
-
+    this->createStreets = true;
     this->addParameter("Width", DM::DOUBLE, &this->width);
     this->addParameter("Height", DM::DOUBLE, &this->height);
-
+    this->addParameter("CreateStreets", DM::BOOL, &this->createStreets);
 
     this->addData("City", views);
 }
+
+
 
 void CityBlock::run() {
 
@@ -159,22 +161,26 @@ void CityBlock::run() {
                 //Every Edge is also a Street
                 if (e1 == 0) {
                     e1 = city->addEdge(n1, n2);
-                    city->addComponentToView(e1, streets);
+                    if (createStreets)
+                        city->addComponentToView(e1, streets);
                     this->addEdge(e1, n1, n2);
                 }
                 if (e2 == 0) {
                     e2 = city->addEdge(n2, n3);
-                    city->addComponentToView(e2, streets);
+                    if (createStreets)
+                        city->addComponentToView(e2, streets);
                     this->addEdge(e2, n2, n3);
                 }
                 if (e3 == 0) {
                     e3 = city->addEdge(n3, n4);
-                    city->addComponentToView(e3, streets);
+                    if (createStreets)
+                        city->addComponentToView(e3, streets);
                     this->addEdge(e3, n3, n4);
                 }
                 if (e4 == 0) {
                     e4 = city->addEdge(n4, n1);
-                    city->addComponentToView(e4, streets);
+                    if (createStreets)
+                        city->addComponentToView(e4, streets);
                     this->addEdge(e4, n4, n1);
                 }
 
