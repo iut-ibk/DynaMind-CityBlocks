@@ -36,8 +36,8 @@ class SuperBlock : public  DM::Module
         DM::View block ;
     long height;
     long width;
-    long offsetx;
-    long offsety;
+    double offsetx;
+    double offsety;
 public:
     SuperBlock();
     void run();

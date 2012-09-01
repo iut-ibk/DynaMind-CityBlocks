@@ -44,8 +44,8 @@ SuperBlock::SuperBlock()
     offsety = 0;
     this->addParameter("Height", DM::LONG, &height);
     this->addParameter("Width", DM::LONG, &width);
-    this->addParameter("offsetx", DM::LONG, &offsetx);
-    this->addParameter("offsety", DM::LONG, &offsety);
+    this->addParameter("offsetx", DM::DOUBLE, &offsetx);
+    this->addParameter("offsety", DM::DOUBLE, &offsety);
     this->addData("City", views);
 
 }
@@ -59,7 +59,7 @@ void SuperBlock::run() {
     DM::Node * n1 = blocks->addNode(offsetx,offsety,0);
     DM::Node * n2 = blocks->addNode(offsetx+width,offsety,0);
     DM::Node * n3 = blocks->addNode(offsetx+width,offsety+height,0);
-    DM::Node * n4 = blocks->addNode(offsetx,height,0);
+    DM::Node * n4 = blocks->addNode(offsetx,offsety+height,0);
 
     DM::Edge * e1 = blocks->addEdge(n1, n2);
     DM::Edge * e2 = blocks->addEdge(n2, n3);
