@@ -3,15 +3,15 @@ file(GLOB MODULE_CPPS *.cpp)
 include_directories(.)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+add_library(cityblock SHARED ${MODULE_CPPS})
+
 IF(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-        SET_TARGET_PROPERTIES(dynamindgui PROPERTIES COMPILE_FLAGS "/frounding-math")
+        SET_TARGET_PROPERTIES(cityblock PROPERTIES COMPILE_FLAGS "/frounding-math")
 ENDIF()
 
 IF(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
-        SET_TARGET_PROPERTIES(dynamindgui PROPERTIES COMPILE_FLAGS "-frounding-math")
+        SET_TARGET_PROPERTIES(cityblock PROPERTIES COMPILE_FLAGS "-frounding-math")
 ENDIF()
-
-add_library(cityblock SHARED ${MODULE_CPPS})
 
 target_link_libraries(cityblock ${DYNAMIND_TOOLBOX_LIBRARY}  ${DYNAMIND_CORE_LIBRARY} ${QT_LIBRARIES})
 
