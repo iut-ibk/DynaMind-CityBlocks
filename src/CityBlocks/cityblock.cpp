@@ -28,11 +28,14 @@
 #include <dm.h>
 #include <math.h>
 #include <tbvectordata.h>
+#include <dmgeometry.h>
 
 DM_DECLARE_NODE_NAME(CityBlock,BlockCity)
 
 CityBlock::CityBlock()
 {
+    this->addParameter("Offset", DM::DOUBLE, &offset);
+
     std::vector<DM::View> views;
     superblock = DM::View("SUPERBLOCK", DM::FACE, DM::READ);
     superblock.addAttribute("CityBlock_Width");
@@ -63,17 +66,18 @@ CityBlock::CityBlock()
     this->addParameter("Height", DM::DOUBLE, &this->height);
     devider = 100;
     this->addParameter("CreateStreets", DM::BOOL, &this->createStreets);
-
+    offset = 0;
+    this->addParameter("Offset", DM::DOUBLE, &this->offset);
     this->addData("City", views);
 }
 
 
 
 void CityBlock::run() {
-    nodeList.clear();
+
     DM::System * city = this->getData("City");
 
-
+    DM::SpatialNodeHashMap nodeList(city, devider);
 
     std::vector<std::string> blockids = city->getUUIDsOfComponentsInView(superblock);
 
@@ -139,24 +143,14 @@ void CityBlock::run() {
         for (int x = 0; x < elements_x; x++) {
             for (int y = 0; y < elements_y; y++) {
                 counter++;
-                DM::Node * n1 = addNode(city,
-                                        intersections,
-                                        minX + realwidth*x,minY + realheight*y,0,
-                                        .001);
-                DM::Node * n2 = addNode(city,
-                                        intersections,
-                                        minX + realwidth*(x+1),minY + realheight*y,0,
-                                        .001);
-                DM::Node * n3 = addNode(city,
-                                        intersections,
-                                        minX + realwidth*(x+1),minY + realheight*(y+1),0,
-                                        .001);
-                DM::Node * n4 = addNode(city,
-                                        intersections,
-                                        minX + realwidth*x,minY + realheight*(y+1),0,
-                                        .001);
-
-
+                DM::Node * n1 = nodeList.addNode(minX + realwidth*x,minY + realheight*y,0,
+                                        .001, intersections);
+                DM::Node * n2 = nodeList.addNode( minX + realwidth*(x+1),minY + realheight*y,0,
+                                        .001, intersections);
+                DM::Node * n3 = nodeList.addNode(minX + realwidth*(x+1),minY + realheight*(y+1),0,
+                                        .001, intersections);
+                DM::Node * n4 = nodeList.addNode(minX + realwidth*x,minY + realheight*(y+1),0,
+                                        .001, intersections);
 
                 DM::Edge * e1 = getAlreadyCreateEdge(n1, n2);
                 DM::Edge * e2 = getAlreadyCreateEdge(n2, n3);
@@ -242,31 +236,4 @@ void CityBlock::addEdge(DM::Edge *e, DM::Node * n1, DM::Node * n2) {
     StartAndEndNodeList[n2] = submap;
 }
 
-DM::Node * CityBlock::addNode(DM::System * sys, DM::View v, double x, double y, double z, double tol) {
-    //CreateKey
-    DM::Node n_tmp(x,y,z);
-    QString key = this->createHash(x,y);
-    std::vector<DM::Node* > * nodes = nodeList[key];
-    if (!nodes) {
-        nodes = new std::vector<DM::Node* >;
-        nodeList[key] = nodes;
-    }
 
-    foreach (DM::Node * n, *nodes) {
-        if (n->compare2d(&n_tmp, tol))
-            return n;
-    }
-
-    DM::Node * res_n = sys->addNode(n_tmp, v);
-    nodes->push_back(res_n);
-    return res_n;
-}
-
-QString CityBlock::createHash(double x, double y)
-{
-    int ix = (int) x / devider;
-    int iy = (int) y / devider;
-    QString key = QString::number(ix) + "|" +  QString::number(iy);
-
-    return key;
-}
