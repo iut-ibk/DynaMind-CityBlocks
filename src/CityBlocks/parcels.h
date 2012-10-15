@@ -38,6 +38,10 @@ private:
     DM::View parcels;
     DM::View streets;
     DM::View intersections;
+    
+    double p_height;
+    double width;
+    
 public:
     Parcels();
     void run();

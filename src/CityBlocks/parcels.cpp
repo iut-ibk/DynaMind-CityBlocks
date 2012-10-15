@@ -40,7 +40,11 @@ Parcels::Parcels()
     intersections = DM::View("INTERSECTION", DM::NODE, DM::MODIFY);
     std::vector<DM::View> views;
 
-
+    width = 22;
+    this->addParameter("Width", DM::DOUBLE, &width);
+    p_height = 18.2;
+    this->addParameter("Height", DM::DOUBLE, &p_height);
+    
     views.push_back(cityblock);
     views.push_back(parcels);
     views.push_back(streets);
@@ -98,8 +102,8 @@ void Parcels::run() {
 
         //Create Parcels
 
-        int elements_x = length/20;
-        int elements_y = height/10;
+        int elements_x = length/width;
+        int elements_y = height/p_height;
         double realwidth = length / elements_x;
         double realheight = height / elements_y;
         bool generateStreet = true;
