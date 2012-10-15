@@ -93,15 +93,6 @@ void Parcels::run() {
         DM::Node * streetnode1 = city->addNode(origin.getX(), origin.getY()+height/2, 0, intersections);
         DM::Node * streetnode2 = city->addNode(origin.getX()+length, origin.getY()+height/2, 0, intersections);
 
-        DM::Edge * street1 = TBVectorData::getEdge(city, streets, nodelist[0], nodelist[3], false);
-        if (street1 != 0) {
-            TBVectorData::splitEdge(city,  street1, streetnode1, streets);
-        }
-        DM::Edge * street2 = TBVectorData::getEdge(city, streets, nodelist[1], nodelist[2], false);
-        if (street2 != 0) {
-            TBVectorData::splitEdge(city,  street2, streetnode2, streets);
-        }
-
         DM::Edge * street = city->addEdge(streetnode1, streetnode2, streets);
         street->addAttribute("Order",1);
 
@@ -120,50 +111,16 @@ void Parcels::run() {
       *     1    2
     */
         for (int x = 0; x < elements_x; x++) {
-
             for (int y = 0; y < elements_y; y++) {
-
                 DM::Node * n1 = city->addNode( origin+DM::Node(realwidth*x,realheight*y,0));
                 DM::Node * n2 = city->addNode( origin+DM::Node(realwidth*(x+1), realheight*y,0));
                 DM::Node * n3 = city->addNode( origin+DM::Node( realwidth*(x+1), realheight*(y+1),0));
                 DM::Node * n4 = city->addNode( origin+DM::Node (realwidth*x,realheight*(y+1),0));
 
-
-
-
-                DM::Edge * e1 = city->addEdge(n1, n2);
-
-                DM::Edge * e2 = city->addEdge(n2, n3);
-
-                DM::Edge * e3 = city->addEdge(n3, n4);
-
-                DM::Edge * e4 = city->addEdge(n4, n1);
-
-
-                //Every Edge is also a Street
-                /*if (TBVectorData::getEdge(city, streets, e1, false) == 0) {
-                    city->addComponentToView(e1, streets);
-                    e1->addAttribute("Order", 2);
-
-
-                }*/
-                if (generateStreet) {
-                    city->addComponentToView(e2, streets);
-                    e2->addAttribute("Order", 2);
-                    if (y == 0)
-                        TBVectorData::splitEdge(city, street, n2, streets);
-
-                }
-                /*if (TBVectorData::getEdge(city, streets, e3, false) == 0) {
-                    city->addComponentToView(e3, streets);
-                    e3->addAttribute("Order", 2);
-
-                }
-                if (TBVectorData::getEdge(city, streets, e4, false) == 0) {
-                    city->addComponentToView(e4, streets);
-                    e4->addAttribute("Order", 2);
-
-                }*/
+                DM::Edge * e1 = city->addEdge(n1, n2, streets);
+                DM::Edge * e2 = city->addEdge(n2, n3, streets);
+                DM::Edge * e3 = city->addEdge(n3, n4, streets);
+                DM::Edge * e4 = city->addEdge(n4, n1, streets);
 
                 std::vector<DM::Node*> ve;
                 ve.push_back(n1);
@@ -172,8 +129,8 @@ void Parcels::run() {
                 ve.push_back(n4);
                 ve.push_back(n1);
 
-
                 DM::Face * f = city->addFace(ve, parcels);
+
             }
             if (generateStreet) {
                 generateStreet = false;
