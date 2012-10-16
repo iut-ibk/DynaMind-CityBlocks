@@ -93,22 +93,14 @@ void Parcels::run() {
         double length = delta.getX();
         double height = delta.getY();
 
-        //Add Street
-        DM::Node * streetnode1 = city->addNode(origin.getX(), origin.getY()+height/2, 0, intersections);
-        DM::Node * streetnode2 = city->addNode(origin.getX()+length, origin.getY()+height/2, 0, intersections);
-
-        DM::Edge * street = city->addEdge(streetnode1, streetnode2, streets);
-        street->addAttribute("Order",1);
-
         //Create Parcels
-
         int elements_x = length/width;
         int elements_y = height/p_height;
         double realwidth = length / elements_x;
         double realheight = height / elements_y;
         bool generateStreet = true;
 
-        /**Generation Process -> left to right
+    /**Generation Process -> left to right
       *     |    |
       * ----|----|
       *     |    |
@@ -121,10 +113,10 @@ void Parcels::run() {
                 DM::Node * n3 = city->addNode( origin+DM::Node( realwidth*(x+1), realheight*(y+1),0));
                 DM::Node * n4 = city->addNode( origin+DM::Node (realwidth*x,realheight*(y+1),0));
 
-                DM::Edge * e1 = city->addEdge(n1, n2, streets);
+                /*DM::Edge * e1 = city->addEdge(n1, n2, streets);
                 DM::Edge * e2 = city->addEdge(n2, n3, streets);
                 DM::Edge * e3 = city->addEdge(n3, n4, streets);
-                DM::Edge * e4 = city->addEdge(n4, n1, streets);
+                DM::Edge * e4 = city->addEdge(n4, n1, streets);*/
 
                 std::vector<DM::Node*> ve;
                 ve.push_back(n1);
