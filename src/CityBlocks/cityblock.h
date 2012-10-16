@@ -6,7 +6,7 @@
  *
  * This file is part of DynaMind
  *
- * Copyright (C) 2011  Christian Urich
+ * Copyright (C) 2011-2012  Christian Urich
  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,17 +30,20 @@
 #include <dmmodule.h>
 #include <dm.h>
 #include <QHash>
+
+
 class CityBlock : public DM::Module
 {
     DM_DECLARE_NODE(CityBlock)
     public:
         CityBlock();
     void run();
-    double offset;
+    
 
 private:
     double height;
     double width;
+    double offset;
     bool createStreets;
     DM::View superblock;
     DM::View intersections;
