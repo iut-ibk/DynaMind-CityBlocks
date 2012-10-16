@@ -6,7 +6,7 @@
  *
  * This file is part of DynaMind
  *
- * Copyright (C) 2011  Christian Urich
+ * Copyright (C) 2011-2012  Christian Urich
  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,12 +29,12 @@
 #include <math.h>
 #include <tbvectordata.h>
 #include <dmgeometry.h>
+#include <cgalgeometry.h>
 
 DM_DECLARE_NODE_NAME(CityBlock,BlockCity)
 
 CityBlock::CityBlock()
 {
-    this->addParameter("Offset", DM::DOUBLE, &offset);
 
     std::vector<DM::View> views;
     superblock = DM::View("SUPERBLOCK", DM::FACE, DM::READ);
@@ -66,7 +66,7 @@ CityBlock::CityBlock()
     this->addParameter("Height", DM::DOUBLE, &this->height);
     devider = 100;
     this->addParameter("CreateStreets", DM::BOOL, &this->createStreets);
-    offset = 0;
+    offset = 7.5;
     this->addParameter("Offset", DM::DOUBLE, &this->offset);
     this->addData("City", views);
 }
@@ -183,15 +183,27 @@ void CityBlock::run() {
                     this->addEdge(e4, n4, n1);
                 }
 
+                //Create Face
                 std::vector<DM::Node*> ve;
                 ve.push_back(n1);
                 ve.push_back(n2);
                 ve.push_back(n3);
                 ve.push_back(n4);
-                ve.push_back(n1);
+                //ve.push_back(n1);
 
+                std::vector<DM::Node> offest_nodes = DM::CGALGeometry::offsetPolygon(ve, 7.5);
 
-                DM::Face * f = city->addFace(ve, cityblock);
+                std::vector<DM::Node*> face_nodes;
+                foreach (DM::Node n, offest_nodes) {
+                    face_nodes.push_back(city->addNode(n));
+                }
+                if (face_nodes.size() < 3) {
+                    DM::Logger(DM::Warning) << "Couldn't create face";
+                    continue;
+                }
+                face_nodes.push_back(face_nodes[0]);
+                
+                DM::Face * f = city->addFace(face_nodes, cityblock);
                 f->addAttribute("Area", realwidth*realheight);
                 f->addAttribute("grid_id", counter);
                 f->addAttribute("relative_x", x+1);
@@ -199,11 +211,7 @@ void CityBlock::run() {
                 DM::Node * n =city->addNode(minX + realwidth*(x+0.5),minY + realheight*(y+0.5),0, centercityblock);
                 DM::Attribute attr("ID_CATCHMENT");
                 attr.setString(f->getUUID());
-                n->addAttribute(attr);
-                int i = 0;
-
-
-
+                n->addAttribute(attr);  
             }
         }
     }
