@@ -38,10 +38,10 @@ CityBlock::CityBlock()
 
     std::vector<DM::View> views;
     superblock = DM::View("SUPERBLOCK", DM::FACE, DM::READ);
-    superblock.addAttribute("CityBlock_Width");
-    superblock.addAttribute("CityBlock_Height");
+    superblock.getAttribute("width");
+    superblock.getAttribute("height");
     cityblock = DM::View("CITYBLOCK", DM::FACE, DM::WRITE);
-    cityblock.addAttribute("Area");
+    cityblock.addAttribute("area");
     cityblock.addAttribute("grid_id");
     cityblock.addAttribute("relative_x");
     cityblock.addAttribute("relative_y");
@@ -134,8 +134,8 @@ void CityBlock::run() {
         int elements_y = blockHeight/this->height;
         double realwidth = blockWidth / elements_x;
         double realheight = blockHeight / elements_y;
-        fblock->addAttribute("CityBlock_Width",realwidth);
-        fblock->addAttribute("CityBlock_Height",realheight);
+        fblock->addAttribute("width",realwidth);
+        fblock->addAttribute("height",realheight);
         StartAndEndNodeList.clear();
 
 
@@ -191,7 +191,8 @@ void CityBlock::run() {
                 ve.push_back(n4);
                 //ve.push_back(n1);
 
-                std::vector<DM::Node> offest_nodes = DM::CGALGeometry::OffsetPolygon(ve, 7.5);
+                std::vector<DM::Node> offest_nodes;
+                offest_nodes = DM::CGALGeometry::OffsetPolygon(ve, 7.5);
 
                 std::vector<DM::Node*> face_nodes;
                 foreach (DM::Node n, offest_nodes) {
@@ -204,7 +205,7 @@ void CityBlock::run() {
                 face_nodes.push_back(face_nodes[0]);
                 
                 DM::Face * f = city->addFace(face_nodes, cityblock);
-                f->addAttribute("Area", realwidth*realheight);
+                f->addAttribute("area", realwidth*realheight);
                 f->addAttribute("grid_id", counter);
                 f->addAttribute("relative_x", x+1);
                 f->addAttribute("relative_y", y+1);

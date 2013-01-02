@@ -35,8 +35,8 @@ SuperBlock::SuperBlock()
 {
     std::vector<DM::View> views;
     block = DM::View("SUPERBLOCK", DM::FACE, DM::WRITE);
-    block.addAttribute("Height");
-    block.addAttribute("Width");
+    block.addAttribute("height");
+    block.addAttribute("width");
     views.push_back(block);
     height = 1000;
     width = 1000;
@@ -53,18 +53,10 @@ void SuperBlock::run() {
 
     DM::System * blocks = this->getData("City");
 
-
-
-
     DM::Node * n1 = blocks->addNode(offsetx,offsety,0);
     DM::Node * n2 = blocks->addNode(offsetx+width,offsety,0);
     DM::Node * n3 = blocks->addNode(offsetx+width,offsety+height,0);
     DM::Node * n4 = blocks->addNode(offsetx,offsety+height,0);
-
-    DM::Edge * e1 = blocks->addEdge(n1, n2);
-    DM::Edge * e2 = blocks->addEdge(n2, n3);
-    DM::Edge * e3 = blocks->addEdge(n3, n4);
-    DM::Edge * e4 = blocks->addEdge(n4, n1);
 
     std::vector<DM::Node*> ve;
     ve.push_back(n1);
@@ -73,11 +65,9 @@ void SuperBlock::run() {
     ve.push_back(n4);
     ve.push_back(n1);
 
-
-
     DM::Face * f = blocks->addFace(ve, block);
-    f->addAttribute("Height", height);
-    f->addAttribute("Width", width);
+    f->addAttribute("height", height);
+    f->addAttribute("width", width);
 
 
 }

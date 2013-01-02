@@ -71,7 +71,7 @@ void Parcels::run() {
         double maxx;
         double maxy;
         std::vector<DM::Node *> nodelist =  TBVectorData::getNodeListFromFace(city, block);
-        for (int i = 0; i < nodelist.size(); i++) {
+        for (unsigned int i = 0; i < nodelist.size(); i++) {
             if (i == 0) {
                 minx = nodelist[i]->getX();
                 miny = nodelist[i]->getY();
