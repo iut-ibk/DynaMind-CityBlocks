@@ -190,12 +190,11 @@ void CityBlock::run() {
                 ve.push_back(n3);
                 ve.push_back(n4);
                 //ve.push_back(n1);
-
                 std::vector<DM::Node> offest_nodes;
                 offest_nodes = DM::CGALGeometry::OffsetPolygon(ve, 7.5);
 
                 std::vector<DM::Node*> face_nodes;
-                foreach (DM::Node n, offest_nodes) {
+                foreach (DM::Node n, DM::CGALGeometry::OffsetPolygon(ve, 7.5)) {
                     face_nodes.push_back(city->addNode(n));
                 }
                 if (face_nodes.size() < 3) {
