@@ -29,6 +29,7 @@
 #include "cityblock.h"
 #include "simplesewerlayout.h"
 #include "parcels.h"
+#include "offsetstreet.h"
 
 
 using namespace std;
@@ -40,6 +41,7 @@ extern "C" void DM_HELPER_DLL_EXPORT  registerModules(DM::ModuleRegistry *regist
     registry->addNodeFactory(new DM::NodeFactory<CityBlock>());
     registry->addNodeFactory(new DM::NodeFactory<SimpleSewerLayout>());
     registry->addNodeFactory(new DM::NodeFactory<Parcels>());
+    registry->addNodeFactory(new DM::NodeFactory<OffsetStreet>());
 
 }
 

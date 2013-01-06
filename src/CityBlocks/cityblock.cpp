@@ -47,10 +47,11 @@ CityBlock::CityBlock()
     cityblock.addAttribute("relative_y");
 
     streets = DM::View("STREET", DM::EDGE, DM::WRITE);
+    streets.addAttribute("width");
     intersections = DM::View("INTERSECTION", DM::NODE, DM::WRITE);
 
     centercityblock = DM::View("CENTERCITYBLOCK", DM::NODE, DM::WRITE);
-    centercityblock.addAttribute("ID_CATCHMENT");
+
 
     views.push_back(superblock);
     views.push_back(cityblock);
@@ -160,26 +161,34 @@ void CityBlock::run() {
                 //Every Edge is also a Street
                 if (e1 == 0) {
                     e1 = city->addEdge(n1, n2);
-                    if (createStreets)
+                    if (createStreets) {
                         city->addComponentToView(e1, streets);
+                        e1->addAttribute("width", this->offset*2);
+                    }
                     this->addEdge(e1, n1, n2);
                 }
                 if (e2 == 0) {
                     e2 = city->addEdge(n2, n3);
-                    if (createStreets)
+                    if (createStreets) {
                         city->addComponentToView(e2, streets);
+                        e2->addAttribute("width", this->offset*2);
+                    }
                     this->addEdge(e2, n2, n3);
                 }
                 if (e3 == 0) {
                     e3 = city->addEdge(n3, n4);
-                    if (createStreets)
+                    if (createStreets) {
                         city->addComponentToView(e3, streets);
+                        e3->addAttribute("width", this->offset*2);
+                    }
                     this->addEdge(e3, n3, n4);
                 }
                 if (e4 == 0) {
                     e4 = city->addEdge(n4, n1);
-                    if (createStreets)
+                    if (createStreets) {
                         city->addComponentToView(e4, streets);
+                        e4->addAttribute("width", this->offset*2);
+                    }
                     this->addEdge(e4, n4, n1);
                 }
 
@@ -191,10 +200,10 @@ void CityBlock::run() {
                 ve.push_back(n4);
                 //ve.push_back(n1);
                 std::vector<DM::Node> offest_nodes;
-                offest_nodes = DM::CGALGeometry::OffsetPolygon(ve, 7.5);
+                offest_nodes = DM::CGALGeometry::OffsetPolygon(ve, this->offset);
 
                 std::vector<DM::Node*> face_nodes;
-                foreach (DM::Node n, DM::CGALGeometry::OffsetPolygon(ve, 7.5)) {
+                foreach (DM::Node n, DM::CGALGeometry::OffsetPolygon(ve, this->offset)) {
                     face_nodes.push_back(city->addNode(n));
                 }
                 if (face_nodes.size() < 3) {
@@ -209,9 +218,6 @@ void CityBlock::run() {
                 f->addAttribute("relative_x", x+1);
                 f->addAttribute("relative_y", y+1);
                 DM::Node * n =city->addNode(minX + realwidth*(x+0.5),minY + realheight*(y+0.5),0, centercityblock);
-                DM::Attribute attr("ID_CATCHMENT");
-                attr.setString(f->getUUID());
-                n->addAttribute(attr);  
             }
         }
     }

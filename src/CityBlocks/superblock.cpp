@@ -42,13 +42,25 @@ SuperBlock::SuperBlock()
     width = 1000;
     offsetx = 0;
     offsety = 0;
+    appendToExisting = false;
     this->addParameter("Height", DM::LONG, &height);
     this->addParameter("Width", DM::LONG, &width);
     this->addParameter("offsetx", DM::DOUBLE, &offsetx);
     this->addParameter("offsety", DM::DOUBLE, &offsety);
+    this->addParameter("appendToExisting", DM::BOOL, &appendToExisting);
     this->addData("City", views);
 
 }
+
+void SuperBlock::init() {
+    if (!this->appendToExisting)
+        return;
+    std::vector<DM::View> views;
+    views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::MODIFY));
+    views.push_back(block);
+    this->addData("City", views);
+}
+
 void SuperBlock::run() {
 
     DM::System * blocks = this->getData("City");

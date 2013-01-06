@@ -38,9 +38,12 @@ class SuperBlock : public  DM::Module
     long width;
     double offsetx;
     double offsety;
+
+    bool appendToExisting;
 public:
     SuperBlock();
     void run();
+    void init();
 
 
 

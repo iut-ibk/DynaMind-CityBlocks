@@ -35,7 +35,7 @@ SimpleSewerLayout::SimpleSewerLayout()
     streets = DM::View("STREET", DM::EDGE, DM::READ);
     conduits = DM::View("CONDUIT", DM::EDGE, DM::WRITE);
     inlets =  DM::View("INLET", DM::EDGE, DM::WRITE);
-    inlets.addAttribute("ID_CATCHMENT");
+    inlets.addAttribute("CATCHMENT");
     shaft = DM::View("SHAFT", DM::NODE, DM::READ);
     endnode =  DM::View("ENDNODE", DM::EDGE, DM::WRITE);
     cityblock =  DM::View("CITYBLOCK", DM::FACE, DM::READ);
@@ -82,7 +82,7 @@ void SimpleSewerLayout::run() {
         DM::Node * n1 = city->getNode(nodes[0]);
 
         city->addComponentToView(n1, inlets);
-        DM::Attribute  attr1 = DM::Attribute("ID_CATCHMENT");
+        DM::Attribute  attr1 = DM::Attribute("CATCHMENT");
         attr1.setString(face->getUUID());
         n1->addAttribute(attr1);
 
