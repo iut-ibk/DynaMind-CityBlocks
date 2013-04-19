@@ -2,7 +2,7 @@
 #include "cgalskeletonisation.h"
 #include <tbvectordata.h>
 #include <dmgeometry.h>
-#include <cgaltriangulation.h>
+//#include <cgaltriangulation.h>
 
 DM_DECLARE_NODE_NAME(Buildings, BlockCity)
 
@@ -86,7 +86,7 @@ void Buildings::createRoof(DM::System * sys, DM::Face * f, double alpha)
     DM::View view_roof_faces("Roof", DM::EDGE, DM::WRITE);
     std::vector<std::string> roof_uuids = roof.getUUIDs(view_roof_faces);
 
-    DM::SpatialNodeHashMap sphm(sys, 100, false);
+    /*DM::SpatialNodeHashMap sphm(sys, 100, false);
     foreach (std::string uuid, roof_uuids) {
         DM::Face * f = roof.getFace(uuid);
 
@@ -103,5 +103,5 @@ void Buildings::createRoof(DM::System * sys, DM::Face * f, double alpha)
             fnodes.push_back(fnodes[0]);
             sys->addFace(fnodes, view_buildings_faces);
         }
-    }
+    }*/
 }
