@@ -27,7 +27,6 @@
 #include "dmmoduleregistry.h"
 #include "superblock.h"
 #include "cityblock.h"
-#include "simplesewerlayout.h"
 #include "parcels.h"
 #include "offsetstreet.h"
 #include "buildings.h"
@@ -41,7 +40,6 @@ using namespace std;
 extern "C" void DM_HELPER_DLL_EXPORT  registerModules(DM::ModuleRegistry *registry) {
     registry->addNodeFactory(new DM::NodeFactory<SuperBlock>());
     registry->addNodeFactory(new DM::NodeFactory<CityBlock>());
-    registry->addNodeFactory(new DM::NodeFactory<SimpleSewerLayout>());
     registry->addNodeFactory(new DM::NodeFactory<Parcels>());
     registry->addNodeFactory(new DM::NodeFactory<OffsetStreet>());
     registry->addNodeFactory(new DM::NodeFactory<Buildings>());
