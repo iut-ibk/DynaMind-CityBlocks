@@ -33,32 +33,43 @@
 DM_DECLARE_NODE_NAME( SuperBlock,BlockCity )
 SuperBlock::SuperBlock()
 {
-    std::vector<DM::View> views;
-    block = DM::View("SUPERBLOCK", DM::FACE, DM::WRITE);
-    block.addAttribute("height");
-    block.addAttribute("width");
-    views.push_back(block);
+
     height = 1000;
     width = 1000;
     offsetx = 0;
     offsety = 0;
     appendToExisting = false;
+    NameOfSuperBlock = "SUPERBLOCK";
+    this->addParameter("NameOfSuperBlock", DM::STRING, &this->NameOfSuperBlock);
+    this->addParameter("Height", DM::LONG, &height);
     this->addParameter("Height", DM::LONG, &height);
     this->addParameter("Width", DM::LONG, &width);
     this->addParameter("offsetx", DM::DOUBLE, &offsetx);
     this->addParameter("offsety", DM::DOUBLE, &offsety);
     this->addParameter("appendToExisting", DM::BOOL, &appendToExisting);
+
+    std::vector<DM::View> views;
+    views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::WRITE));
     this->addData("City", views);
 
 }
 
 void SuperBlock::init() {
-    if (!this->appendToExisting)
-        return;
+
+    block = DM::View(NameOfSuperBlock, DM::FACE, DM::WRITE);
+    block.addAttribute("height");
+    block.addAttribute("width");
+
     std::vector<DM::View> views;
-    views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::MODIFY));
     views.push_back(block);
+    if (this->appendToExisting) views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::MODIFY));
+
     this->addData("City", views);
+}
+
+string SuperBlock::getHelpUrl()
+{
+    return "https://github.com/iut-ibk/DynaMind-ToolBox/wiki/Superblock";
 }
 
 void SuperBlock::run() {
@@ -80,6 +91,5 @@ void SuperBlock::run() {
     DM::Face * f = blocks->addFace(ve, block);
     f->addAttribute("height", height);
     f->addAttribute("width", width);
-
 
 }

@@ -38,12 +38,14 @@ class SuperBlock : public  DM::Module
     long width;
     double offsetx;
     double offsety;
+    std::string NameOfSuperBlock;
 
     bool appendToExisting;
 public:
     SuperBlock();
     void run();
     void init();
+    std::string getHelpUrl();
 
 
 
