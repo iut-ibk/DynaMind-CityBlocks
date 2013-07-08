@@ -35,31 +35,6 @@ DM_DECLARE_NODE_NAME(CityBlock,BlockCity)
 
 CityBlock::CityBlock()
 {
-
-    std::vector<DM::View> views;
-    superblock = DM::View("SUPERBLOCK", DM::FACE, DM::READ);
-    superblock.getAttribute("width");
-    superblock.getAttribute("height");
-    cityblock = DM::View("CITYBLOCK", DM::FACE, DM::WRITE);
-    cityblock.addAttribute("area");
-    cityblock.addAttribute("grid_id");
-    cityblock.addAttribute("relative_x");
-    cityblock.addAttribute("relative_y");
-
-    streets = DM::View("STREET", DM::EDGE, DM::WRITE);
-    streets.addAttribute("width");
-    intersections = DM::View("INTERSECTION", DM::NODE, DM::WRITE);
-
-    centercityblock = DM::View("CENTERCITYBLOCK", DM::NODE, DM::WRITE);
-
-
-    views.push_back(superblock);
-    views.push_back(cityblock);
-    views.push_back(streets);
-    views.push_back(intersections);
-    views.push_back(centercityblock);
-
-
     this->width = 100;
     this->height = 100;
     this->createStreets = true;
@@ -69,10 +44,48 @@ CityBlock::CityBlock()
     this->addParameter("CreateStreets", DM::BOOL, &this->createStreets);
     offset = 7.5;
     this->addParameter("Offset", DM::DOUBLE, &this->offset);
+    SuperBlockName = "SUPERBLOCK";
+    BlockNames = "CITYBLOCK";
+    EdgeName = "STREET";
+    CenterCityblockName = "CENTERCITYBLOCK";
+    InterSections = "INTERSECTION";
+
+    this->addParameter("SuperBlockName", DM::STRING, &this->SuperBlockName);
+    this->addParameter("BlockNames", DM::STRING, &this->BlockNames);
+    this->addParameter("EdgeName", DM::STRING, &this->EdgeName);
+    this->addParameter("CenterCityblockName", DM::STRING, &this->CenterCityblockName);
+    this->addParameter("InterSections", DM::STRING, &this->InterSections);
+    std::vector<DM::View> views;
+    views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::MODIFY));
     this->addData("City", views);
 }
 
+void CityBlock::init()
+{
+    std::vector<DM::View> views;
+    superblock = DM::View(SuperBlockName, DM::FACE, DM::READ);
+    superblock.getAttribute("width");
+    superblock.getAttribute("height");
+    cityblock = DM::View(BlockNames, DM::FACE, DM::WRITE);
+    cityblock.addAttribute("area");
+    cityblock.addAttribute("grid_id");
+    cityblock.addAttribute("relative_x");
+    cityblock.addAttribute("relative_y");
 
+    streets = DM::View(EdgeName, DM::EDGE, DM::WRITE);
+    streets.addAttribute("width");
+    intersections = DM::View(InterSections, DM::NODE, DM::WRITE);
+
+    centercityblock = DM::View(CenterCityblockName, DM::NODE, DM::WRITE);
+
+    views.push_back(superblock);
+    views.push_back(cityblock);
+    views.push_back(streets);
+    views.push_back(intersections);
+    views.push_back(centercityblock);
+
+    this->addData("City", views);
+}
 
 void CityBlock::run() {
 
@@ -145,13 +158,13 @@ void CityBlock::run() {
             for (int y = 0; y < elements_y; y++) {
                 counter++;
                 DM::Node * n1 = nodeList.addNode(minX + realwidth*x,minY + realheight*y,0,
-                                        .001, intersections);
+                                                 .001, intersections);
                 DM::Node * n2 = nodeList.addNode( minX + realwidth*(x+1),minY + realheight*y,0,
-                                        .001, intersections);
+                                                  .001, intersections);
                 DM::Node * n3 = nodeList.addNode(minX + realwidth*(x+1),minY + realheight*(y+1),0,
-                                        .001, intersections);
+                                                 .001, intersections);
                 DM::Node * n4 = nodeList.addNode(minX + realwidth*x,minY + realheight*(y+1),0,
-                                        .001, intersections);
+                                                 .001, intersections);
 
                 DM::Edge * e1 = getAlreadyCreateEdge(n1, n2);
                 DM::Edge * e2 = getAlreadyCreateEdge(n2, n3);
@@ -221,10 +234,12 @@ void CityBlock::run() {
             }
         }
     }
-    DM::Logger(DM::Debug) << "Number of CityBlocks " << city->getAllComponentsInView(cityblock).size();
-    DM::Logger(DM::Debug) << "Number of Streets " << city->getAllComponentsInView(streets).size();
+    DM::Logger(DM::Debug) << "Number of Blocks " << city->getAllComponentsInView(cityblock).size();
+    DM::Logger(DM::Debug) << "Number of Edges " << city->getAllComponentsInView(streets).size();
 
 }
+
+
 
 DM::Edge * CityBlock::getAlreadyCreateEdge(DM::Node * n1, DM::Node* n2) {
     if (StartAndEndNodeList.find(n1) == StartAndEndNodeList.end())
