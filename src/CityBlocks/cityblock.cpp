@@ -72,8 +72,10 @@ void CityBlock::init()
 
 
     intersections = DM::View(InterSectionsName, DM::NODE, DM::WRITE);
-
     centercityblock = DM::View(CenterCityblockName, DM::NODE, DM::WRITE);
+
+    centercityblock.addLinks(BlockName, cityblock);
+    cityblock.addLinks(CenterCityblockName, centercityblock);
 
     if (this->createStreets) {
         streets = DM::View(EdgeName, DM::EDGE, DM::WRITE);
@@ -243,8 +245,14 @@ void CityBlock::run() {
                 DM::Face * f = city->addFace(face_nodes, cityblock);
                 f->addAttribute("area", realwidth*realheight);
                 DM::Node * n =city->addNode(minX + realwidth*(x+0.5),minY + realheight*(y+0.5),0, centercityblock);
+                n->addAttribute("centroid_x", n->getX());
+                n->addAttribute("centroid_y", n->getY());
+
 
                 //Create Links
+                n->getAttribute(cityblock.getName())->setLink(cityblock.getName(), f->getUUID());
+                f->getAttribute(centercityblock.getName())->setLink(centercityblock.getName(), n->getUUID());
+
                 if (createStreets) {
                     e1->getAttribute(cityblock.getName())->setLink(cityblock.getName(),f->getUUID());
                     e2->getAttribute(cityblock.getName())->setLink(cityblock.getName(),f->getUUID());
@@ -259,8 +267,6 @@ void CityBlock::run() {
             }
         }
     }
-    DM::Logger(DM::Debug) << "Number of Blocks " << city->getAllComponentsInView(cityblock).size();
-    DM::Logger(DM::Debug) << "Number of Edges " << city->getAllComponentsInView(streets).size();
 
 }
 
