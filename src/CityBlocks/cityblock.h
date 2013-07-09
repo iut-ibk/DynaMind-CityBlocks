@@ -39,6 +39,7 @@ class CityBlock : public DM::Module
         CityBlock();
     void run();
     void init();
+    std::string getHelpUrl();
     
 
 private:
@@ -47,10 +48,10 @@ private:
     double offset;
     bool createStreets;
     std::string SuperBlockName;
-    std::string BlockNames;
+    std::string BlockName;
     std::string EdgeName;
     std::string CenterCityblockName;
-    std::string InterSections;
+    std::string InterSectionsName;
 
     DM::View superblock;
     DM::View intersections;
