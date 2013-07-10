@@ -42,7 +42,6 @@ SuperBlock::SuperBlock()
     NameOfSuperBlock = "SUPERBLOCK";
     this->addParameter("NameOfSuperBlock", DM::STRING, &this->NameOfSuperBlock);
     this->addParameter("Height", DM::LONG, &height);
-    this->addParameter("Height", DM::LONG, &height);
     this->addParameter("Width", DM::LONG, &width);
     this->addParameter("offsetx", DM::DOUBLE, &offsetx);
     this->addParameter("offsety", DM::DOUBLE, &offsety);
