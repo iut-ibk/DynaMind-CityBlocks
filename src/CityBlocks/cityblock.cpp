@@ -73,7 +73,8 @@ void CityBlock::init()
 
     intersections = DM::View(InterSectionsName, DM::NODE, DM::WRITE);
     centercityblock = DM::View(CenterCityblockName, DM::NODE, DM::WRITE);
-
+    centercityblock.addAttribute("centroid_x");
+    centercityblock.addAttribute("centroid_y");
     centercityblock.addLinks(BlockName, cityblock);
     cityblock.addLinks(CenterCityblockName, centercityblock);
 
