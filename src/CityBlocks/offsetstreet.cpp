@@ -66,7 +66,7 @@ void OffsetStreet::run() {
     std::vector<QPointF> centroids;
     foreach (std::string cityblock_uuid, cityblock_uuids) {
         DM::Face * f = city->getFace(cityblock_uuid);
-        DM::Node n_c = TBVectorData::CaclulateCentroid(city, f);
+		DM::Node n_c = DM::CGALGeometry::CalculateCentroid(city, f);
         QPointF p(n_c.getX(), n_c.getY());
         centroids.push_back(p);
     }
