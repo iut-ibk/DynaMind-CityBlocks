@@ -34,35 +34,35 @@
 
 class CityBlock : public DM::Module
 {
-    DM_DECLARE_NODE(CityBlock)
-    public:
-        CityBlock();
-    void run();
-    void init();
-    std::string getHelpUrl();
-    
+	DM_DECLARE_NODE(CityBlock)
+	public:
+		CityBlock();
+	void run();
+	void init();
+	std::string getHelpUrl();
+
 
 private:
-    double height;
-    double width;
-    double offset;
-    bool createStreets;
-    std::string SuperBlockName;
-    std::string BlockName;
-    std::string EdgeName;
-    std::string CenterCityblockName;
-    std::string InterSectionsName;
+	double height;
+	double width;
+	double offset;
+	bool createStreets;
+	std::string SuperBlockName;
+	std::string BlockName;
+	std::string EdgeName;
+	std::string CenterCityblockName;
+	std::string InterSectionsName;
 
-    DM::View superblock;
-    DM::View intersections;
-    DM::View cityblock;
-    DM::View streets;
-    DM::View centercityblock;
+	DM::View superblock;
+	DM::View intersections;
+	DM::View cityblock;
+	DM::View streets;
+	DM::View centercityblock;
 
-    std::map<DM::Node*, std::map<DM::Node*, DM::Edge* > > StartAndEndNodeList;
-    double devider;
-    DM::Edge * getAlreadyCreateEdge(DM::Node * n1, DM::Node* n2);
-    void addEdge(DM::Edge * e, DM::Node *n1, DM::Node *n2);
+	std::map<DM::Node*, std::map<DM::Node*, DM::Edge* > > StartAndEndNodeList;
+	double devider;
+	DM::Edge * getAlreadyCreateEdge(DM::Node * n1, DM::Node* n2);
+	void addEdge(DM::Edge * e, DM::Node *n1, DM::Node *n2);
 
 };
 

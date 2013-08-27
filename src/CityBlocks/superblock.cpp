@@ -34,61 +34,61 @@ DM_DECLARE_NODE_NAME( SuperBlock,BlockCity )
 SuperBlock::SuperBlock()
 {
 
-    height = 1000;
-    width = 1000;
-    offsetx = 0;
-    offsety = 0;
-    appendToExisting = false;
-    NameOfSuperBlock = "SUPERBLOCK";
-    this->addParameter("NameOfSuperBlock", DM::STRING, &this->NameOfSuperBlock);
-    this->addParameter("Height", DM::LONG, &height);
-    this->addParameter("Width", DM::LONG, &width);
-    this->addParameter("offsetx", DM::DOUBLE, &offsetx);
-    this->addParameter("offsety", DM::DOUBLE, &offsety);
-    this->addParameter("appendToExisting", DM::BOOL, &appendToExisting);
+	height = 1000;
+	width = 1000;
+	offsetx = 0;
+	offsety = 0;
+	appendToExisting = false;
+	NameOfSuperBlock = "SUPERBLOCK";
+	this->addParameter("NameOfSuperBlock", DM::STRING, &this->NameOfSuperBlock);
+	this->addParameter("Height", DM::LONG, &height);
+	this->addParameter("Width", DM::LONG, &width);
+	this->addParameter("offsetx", DM::DOUBLE, &offsetx);
+	this->addParameter("offsety", DM::DOUBLE, &offsety);
+	this->addParameter("appendToExisting", DM::BOOL, &appendToExisting);
 
-    std::vector<DM::View> views;
-    views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::WRITE));
-    this->addData("City", views);
+	std::vector<DM::View> views;
+	views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::WRITE));
+	this->addData("City", views);
 
 }
 
 void SuperBlock::init() {
 
-    block = DM::View(NameOfSuperBlock, DM::FACE, DM::WRITE);
-    block.addAttribute("height");
-    block.addAttribute("width");
+	block = DM::View(NameOfSuperBlock, DM::FACE, DM::WRITE);
+	block.addAttribute("height");
+	block.addAttribute("width");
 
-    std::vector<DM::View> views;
-    views.push_back(block);
-    if (this->appendToExisting) views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::MODIFY));
+	std::vector<DM::View> views;
+	views.push_back(block);
+	if (this->appendToExisting) views.push_back(DM::View("dummy", DM::SUBSYSTEM, DM::MODIFY));
 
-    this->addData("City", views);
+	this->addData("City", views);
 }
 
 string SuperBlock::getHelpUrl()
 {
-    return "https://github.com/iut-ibk/DynaMind-ToolBox/wiki/Superblock";
+	return "https://github.com/iut-ibk/DynaMind-ToolBox/wiki/Superblock";
 }
 
 void SuperBlock::run() {
 
-    DM::System * blocks = this->getData("City");
+	DM::System * blocks = this->getData("City");
 
-    DM::Node * n1 = blocks->addNode(offsetx,offsety,0);
-    DM::Node * n2 = blocks->addNode(offsetx+width,offsety,0);
-    DM::Node * n3 = blocks->addNode(offsetx+width,offsety+height,0);
-    DM::Node * n4 = blocks->addNode(offsetx,offsety+height,0);
+	DM::Node * n1 = blocks->addNode(offsetx,offsety,0);
+	DM::Node * n2 = blocks->addNode(offsetx+width,offsety,0);
+	DM::Node * n3 = blocks->addNode(offsetx+width,offsety+height,0);
+	DM::Node * n4 = blocks->addNode(offsetx,offsety+height,0);
 
-    std::vector<DM::Node*> ve;
-    ve.push_back(n1);
-    ve.push_back(n2);
-    ve.push_back(n3);
-    ve.push_back(n4);
-    ve.push_back(n1);
+	std::vector<DM::Node*> ve;
+	ve.push_back(n1);
+	ve.push_back(n2);
+	ve.push_back(n3);
+	ve.push_back(n4);
+	ve.push_back(n1);
 
-    DM::Face * f = blocks->addFace(ve, block);
-    f->addAttribute("height", height);
-    f->addAttribute("width", width);
+	DM::Face * f = blocks->addFace(ve, block);
+	f->addAttribute("height", height);
+	f->addAttribute("width", width);
 
 }

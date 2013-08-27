@@ -31,21 +31,21 @@
 #include <dm.h>
 class SuperBlock : public  DM::Module
 {
-    DM_DECLARE_NODE( SuperBlock )
-    private:
-        DM::View block ;
-    long height;
-    long width;
-    double offsetx;
-    double offsety;
-    std::string NameOfSuperBlock;
+	DM_DECLARE_NODE( SuperBlock )
+	private:
+		DM::View block ;
+	long height;
+	long width;
+	double offsetx;
+	double offsety;
+	std::string NameOfSuperBlock;
 
-    bool appendToExisting;
+	bool appendToExisting;
 public:
-    SuperBlock();
-    void run();
-    void init();
-    std::string getHelpUrl();
+	SuperBlock();
+	void run();
+	void init();
+	std::string getHelpUrl();
 
 
 
