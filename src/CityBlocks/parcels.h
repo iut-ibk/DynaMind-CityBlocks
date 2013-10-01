@@ -35,9 +35,7 @@ class Parcels : public DM::Module
 	DM_DECLARE_NODE(Parcels)
 	private:
 		DM::View cityblock;
-	DM::View parcels;
-	DM::View streets;
-	DM::View intersections;
+		DM::View parcels;
 
 	double p_height;
 	double width;

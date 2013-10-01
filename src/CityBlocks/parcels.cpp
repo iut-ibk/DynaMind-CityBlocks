@@ -32,12 +32,8 @@ DM_DECLARE_NODE_NAME(Parcels,BlockCity)
 Parcels::Parcels()
 {
 	cityblock = DM::View("CITYBLOCK", DM::FACE, DM::READ);
-
 	parcels = DM::View("PARCEL", DM::FACE, DM::WRITE);
 
-	streets = DM::View("STREET", DM::EDGE, DM::MODIFY);
-	streets.addAttribute("Order");
-	intersections = DM::View("INTERSECTION", DM::NODE, DM::MODIFY);
 	std::vector<DM::View> views;
 
 	width = 22;
@@ -47,7 +43,7 @@ Parcels::Parcels()
 
 	views.push_back(cityblock);
 	views.push_back(parcels);
-	views.push_back(streets);
+
 
 	this->addData("City", views);
 
@@ -98,7 +94,6 @@ void Parcels::run() {
 		int elements_y = height/p_height;
 		double realwidth = length / elements_x;
 		double realheight = height / elements_y;
-		bool generateStreet = true;
 
 		/**Generation Process -> left to right
 	  *     |    |
@@ -113,11 +108,6 @@ void Parcels::run() {
 				DM::Node * n3 = city->addNode( origin+DM::Node( realwidth*(x+1), realheight*(y+1),0));
 				DM::Node * n4 = city->addNode( origin+DM::Node (realwidth*x,realheight*(y+1),0));
 
-				/*DM::Edge * e1 = city->addEdge(n1, n2, streets);
-				DM::Edge * e2 = city->addEdge(n2, n3, streets);
-				DM::Edge * e3 = city->addEdge(n3, n4, streets);
-				DM::Edge * e4 = city->addEdge(n4, n1, streets);*/
-
 				std::vector<DM::Node*> ve;
 				ve.push_back(n1);
 				ve.push_back(n2);
@@ -128,17 +118,7 @@ void Parcels::run() {
 				DM::Face * f = city->addFace(ve, parcels);
 
 			}
-			if (generateStreet) {
-				generateStreet = false;
-			} else {
-				generateStreet = true;
-			}
 		}
 	}
-
-
 	DM::Logger(DM::Debug) << "Number of Parcels " << city->getAllComponentsInView(parcels).size();
-	DM::Logger(DM::Debug) << "Number of Streets " << city->getAllComponentsInView(streets).size();
-
-
 }
