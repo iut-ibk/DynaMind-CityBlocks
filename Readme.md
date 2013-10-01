@@ -1,1 +1,1 @@
-Models have been moved to DnyaMind-BasicModules [here](doc/List_of_Basic_Modules.md)
+Models have been moved to DynaMind-BasicModules
